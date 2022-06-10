@@ -77,7 +77,7 @@ def create_qr_code(doc, method):
 			tlv_array.append(''.join([tag, length, value]))
 
 			# Invoice Amount
-			invoice_amount = str(doc.grand_total)
+			invoice_amount = str(doc.total)
 			tag = bytes([4]).hex()
 			length = bytes([len(invoice_amount)]).hex()
 			value = invoice_amount.encode('utf-8').hex()
@@ -113,6 +113,7 @@ def create_qr_code(doc, method):
 			_file.save()
 
 			# assigning to document
+			doc.db_set('qr_code_hash', base64_string)
 			doc.db_set('qr_code', _file.file_url)
 			doc.notify_update()
 
